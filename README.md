@@ -34,6 +34,13 @@ flowchart LR
 ## Ficheros principales
 
 - `docker-compose.prod.yaml`: stack de producción (api, frontend, mysql, mongodb, metabase, nginx, certbot).
+Referencias: 
+    - [Angular](https://angular.dev/tools/cli/deployment#manual-deployment-to-a-remote-server)
+    - [Springboot](https://docs.spring.io/spring-boot/how-to/deployment/cloud.html)
+    - [Metabase](https://www.metabase.com/docs/latest/installation-and-operation/running-metabase-on-docker#example-docker-compose-yaml-file)
+    - [MySql](https://dev.mysql.com/doc/mysql-secure-deployment-guide/8.0/en/)
+
+
 - `docker-compose.ssl.yaml`: stack mínimo para obtener el primer certificado (nginx + certbot).
 - `.env.api`, `.env.mysql`, `.env.mongodb`, `.env.nginx`: variables de entorno por servicio.
 - `nginx/prod.conf`: configuración definitiva de Nginx (HTTP + HTTPS + proxy).
