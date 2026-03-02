@@ -1,9 +1,5 @@
-
-infra/certbot/*
-
-certbot/conf/
-certbot/www/
+certbot/*
 
 .env.*
-
+.env
 *.pem

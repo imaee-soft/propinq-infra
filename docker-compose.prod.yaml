@@ -2,7 +2,7 @@ services:
   api:
     build:
       context: ../propinq-api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     container_name: propinq-api-prod
     env_file:
       - .env.api
@@ -17,7 +17,7 @@ services:
   frontend:
     build:
       context: ../propinq-frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     container_name: propinq-frontend-prod
     depends_on:
       - api
