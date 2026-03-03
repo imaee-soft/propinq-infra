@@ -53,35 +53,3 @@ ls -la certbot/conf/live/
 
 8. **Abrir puerto 443** en el Security Group (HTTPS, 443, `0.0.0.0/0`).
 
-## Renovación automática (cron)
-
-El script `renew_certs.sh` ya está en esta carpeta. **El cron no se instala automáticamente**; tú lo añades:
-
-```bash
-crontab -e
-```
-
-Añade esta línea (ajusta la ruta si tu `infra` está en otro sitio):
-
-```
-0 3 * * * /srv/apps/propinq/infra/renew_certs.sh
-```
-
-Así se ejecutará todos los días a las 03:00.
-
-### Comprobar que el cron está instalado
-
-```bash
-crontab -l
-```
-
-Debe aparecer la línea de `renew_certs.sh`.
-
-### Probar el script de renovación a mano
-
-```bash
-cd /srv/apps/propinq/infra
-./renew_certs.sh
-```
-
-Si los certificados no tocan a renovación, Certbot dirá que no hace falta; si tocan, renovará y nginx recargará.
