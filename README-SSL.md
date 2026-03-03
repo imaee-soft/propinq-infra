@@ -1,9 +1,5 @@
 # Certificados SSL (Certbot) y renovación automática
 
-## ¿Se ejecutaron ya los comandos de Certbot?
-
-**No.** Los comandos de Certbot **no se ejecutan solos**. Tienes que hacerlo una vez con el dominio apuntando al EC2 y el puerto 80 abierto.
-
 ## Comprobar si ya tienes certificados
 
 ```bash
