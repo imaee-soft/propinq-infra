@@ -14,9 +14,15 @@ ls -la certbot/conf/live/
 
 ## Pasos para obtener el certificado (solo la primera vez)
 
-1. **Dominio**: El DNS de tu dominio (ej. `www.propinq.online`) debe apuntar a la IP del EC2.
+1. **Dominio**: El DNS de tu dominio (ej. `www.propinq.online`) debe apuntar a la IP del servidor.
 
-2. **Puerto 80 abierto**: En AWS Security Group del EC2, Inbound: HTTP (80) desde `0.0.0.0/0`.
+2. **Puerto 80 abierto**: 
+Inbound: 
+- HTTP (80) desde `0.0.0.0/0` (todos los ipv4, ipv6)
+- HTTPS (443) desde `0.0.0.0/0`(todos los ipv4, ipv6)
+
+Si usa `AWS`: Security Group del EC2,
+Si usa `DigitalOcean`: Cloud Firebase del Droplets 
 
 3. **Nginx solo HTTP (temporal)**  
    Sustituye el contenido de `nginx/prod.conf` por un solo bloque que escuche en 80 y sirva `/.well-known/acme-challenge/`:

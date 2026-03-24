@@ -1,6 +1,6 @@
 # Infra: despliegue de Propinq en producción
 
-Infraestructura Docker para desplegar Propinq (Spring Boot + Angular) en un EC2 con Nginx como reverse proxy y HTTPS con Let's Encrypt.
+Infraestructura Docker para desplegar Propinq (Spring Boot + Angular) en un servidor con Nginx como reverse proxy y HTTPS con Let's Encrypt.
 
 ---
 
@@ -11,7 +11,7 @@ flowchart LR
   subgraph internet [Internet]
     Client[Cliente]
   end
-  subgraph ec2 [EC2]
+  subgraph ec2/droplets [EC2/Droplets]
     Nginx[nginx:80/443]
     Certbot[certbot]
     Frontend[propinq-frontend:80]
@@ -49,9 +49,28 @@ Referencias:
 
 ---
 
-## 1. Preparar variables de entorno
+## 1. Preparar entorno
 
-### 1.1 Variables obligatorias para correr el proyecto
+### 1.1. Docker compose
+Guía de instalación:
+- https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+
+### 1.2. Maven
+
+#### 1.2.1. Instalación de maven
+```
+apt update
+apt install maven -y
+```
+
+#### 1.2.2. creación de .mvn
+```
+mvn wrapper:wrapper
+```
+
+## 2. Preparar variables de entorno
+
+### 2.1 Variables obligatorias para correr el proyecto
 
 Estas variables deben tener siempre un valor válido en producción, agrupadas por fichero `.env`:
 
@@ -68,7 +87,7 @@ Estas variables deben tener siempre un valor válido en producción, agrupadas p
 - **`.env.mongodb`**:
   - `MONGO_DATABASE`, `MONGO_USER`, `MONGO_PASSWORD`
 
-### 1.2 Ficheros `.env` por servicio
+### 2.2 Ficheros `.env` por servicio
 
 En esta carpeta debes crear/ajustar los siguientes ficheros:
 
@@ -159,7 +178,10 @@ En esta carpeta debes crear/ajustar los siguientes ficheros:
 Ajusta los valores a tu entorno
 
 ---
-## 2. Solo la primera vez desplegando el proyecto obtener el primer certificado SSL (Let's Encrypt)
+
+
+
+## Solo la primera vez desplegando el proyecto obtener el primer certificado SSL (Let's Encrypt)
 Seguir los pasos en [@infra/README-SSL.md](README-SSL.md)
 
 ## 3. Nginx con HTTPS y stack de producción
