@@ -8,25 +8,73 @@ Infraestructura Docker para desplegar Propinq (Spring Boot + Angular) en un serv
 
 ```mermaid
 flowchart LR
-  subgraph internet [Internet]
+
+%% ========================
+%% CLIENTE
+%% ========================
+subgraph cliente_ext [Internet / Cliente]
     Client[Cliente]
-  end
-  subgraph ec2/droplets [EC2/Droplets]
-    Nginx[nginx:80/443]
+    Browser[Web Browser]
+    Client --> Browser
+end
+
+%% ========================
+%% AWS EC2
+%% ========================
+subgraph ec2 [AWS EC2 - Servidor Web]
+
+    %% Reverse proxy
+    Nginx[nginx :80/443]
     Certbot[certbot]
-    Frontend[propinq-frontend:80]
-    Backend[propinq-api:8080]
-    MySQL[mysql-db:3306]
-    Mongo[mongodb:27017]
-    Metabase[metabase:3000]
-  end
-  Client --> Nginx
-  Nginx --> Frontend
-  Nginx --> Backend
-  Backend --> MySQL
-  Backend --> Mongo
-  Metabase --> MySQL
-  Nginx -.-> Certbot
+
+    %% Frontend
+    subgraph frontend [Presentación Web]
+        Front[propinq-frontend :80]
+    end
+
+    %% Backend
+    subgraph backend [Lógica de Negocio]
+        API[propinq-api :8080]
+    end
+
+    %% Persistencia
+    subgraph persistencia [Persistencia]
+        MySQL[MySQL :3306]
+        Mongo[MongoDB :27017]
+    end
+
+    %% Analytics
+    Metabase[Metabase :3000]
+
+end
+
+%% ========================
+%% SERVICIOS EXTERNOS
+%% ========================
+Cloudinary[Cloudinary]
+Gmail[Gmail API]
+OpenLayers[OpenLayers API]
+
+%% ========================
+%% RELACIONES
+%% ========================
+
+Browser --> Nginx
+
+Nginx --> Front
+Nginx --> API
+
+API --> MySQL
+API --> Mongo
+
+Metabase --> MySQL
+
+Nginx -.-> Certbot
+
+%% Integraciones externas (CORREGIDAS)
+API -.-> Gmail
+API -.-> Cloudinary
+API -.-> OpenLayers
 ```
 
 ---
