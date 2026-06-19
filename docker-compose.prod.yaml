@@ -13,11 +13,13 @@ services:
       - mongodb
     networks:
       - app-network
+    ports:
+      - "127.0.0.1:8080:8080"
 
   frontend:
     build:
-      context: ../propinq-frontend
-      dockerfile: Dockerfile.prod
+      context: ..
+      dockerfile: propinq-frontend/Dockerfile.prod
     container_name: propinq-frontend-prod
     depends_on:
       - api
@@ -65,7 +67,8 @@ services:
     env_file:
       - .env.nginx
     volumes:
-      - ./nginx/prod.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/prod.ssl.conf:/etc/nginx/conf.d/default.conf:ro
       - nginx_logs:/var/log/nginx
       - ./certbot/www:/var/www/certbot:ro
       - ./certbot/conf:/etc/nginx/ssl:ro
@@ -79,6 +82,7 @@ services:
   certbot:
     image: certbot/certbot:latest
     container_name: certbot-propinq-prod
+    profiles: ["tools"]
     volumes:
       - ./certbot/www:/var/www/certbot:rw
       - ./certbot/conf:/etc/letsencrypt:rw
@@ -94,4 +98,9 @@ volumes:
 networks:
   app-network:
     driver: bridge
-
+    driver_opts:
+      com.docker.network.bridge.name: br-app-network
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
