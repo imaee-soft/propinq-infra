@@ -1,5 +1,6 @@
 certbot/*
 
 .env.*
+!.env.tunnel.example
 .env
 *.pem
