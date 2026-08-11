@@ -22,7 +22,7 @@ services:
       - mysql-db
       - mongodb
     networks:
-      - app-network
+      - docker_net
     # 8080 del host suele estar ocupado (FileBrowser); usar 18080 en homeserver
     ports:
       - "127.0.0.1:18080:8080"
@@ -37,7 +37,7 @@ services:
     depends_on:
       - api
     networks:
-      - app-network
+      - docker_net
     restart: unless-stopped
 
   mysql-db:
@@ -52,7 +52,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
-      - app-network
+      - docker_net
     restart: unless-stopped
 
   mongodb:
@@ -67,7 +67,7 @@ services:
     volumes:
       - mongo-data:/data/db
     networks:
-      - app-network
+      - docker_net
     restart: unless-stopped
 
   metabase:
@@ -80,7 +80,7 @@ services:
     volumes:
       - metabase-data:/metabase-data
     networks:
-      - app-network
+      - docker_net
     restart: unless-stopped
 
   nginx:
@@ -106,7 +106,7 @@ services:
       - frontend
     restart: always
     networks:
-      - app-network
+      - docker_net
 
   tunnel:
     image: cloudflare/cloudflared:latest
@@ -121,7 +121,7 @@ services:
     depends_on:
       - nginx
     networks:
-      - app-network
+      - docker_net
 
   certbot:
     image: certbot/certbot:latest
@@ -131,7 +131,7 @@ services:
       - ./certbot/www:/var/www/certbot:rw
       - ./certbot/conf:/etc/letsencrypt:rw
     networks:
-      - app-network
+      - docker_net
 
 volumes:
   mysql-data:
@@ -140,11 +140,6 @@ volumes:
   nginx_logs:
 
 networks:
-  app-network:
-    driver: bridge
-    driver_opts:
-      com.docker.network.bridge.name: br-propinq
-    ipam:
-      config:
-        - subnet: 172.25.0.0/16
-          gateway: 172.25.0.1
+  docker_net:
+    external: true
+    name: docker_net
