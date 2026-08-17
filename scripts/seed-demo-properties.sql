@@ -1,15 +1,30 @@
 -- Seed demo: casas + edificios con deptos en Villa María, Córdoba Capital y CABA
 -- Imágenes Unsplash (casas / depto interiores / edificios). Cada URL es única (PK).
+-- Usuarios demo (un rol cada uno). Contraseña de todos: admin123
 
 SET NAMES utf8mb4;
 
--- OWNER de prueba (password bcrypt = misma del seed original: "password" o la del hash seed)
-INSERT IGNORE INTO users (
+-- bcrypt(admin123) = $2a$10$udlZWB5DwOzA1I1QJZ3usOVV764/LGq4Ir4/oYZPjMzCbiccTaT6u
+INSERT INTO users (
     user_id, password, birth_date, first_name, last_name, email,
     address, phone_number, role, activated, deleted
-) VALUES (
+) VALUES
+(
+    UNHEX('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'),
+    '$2a$10$udlZWB5DwOzA1I1QJZ3usOVV764/LGq4Ir4/oYZPjMzCbiccTaT6u',
+    '1990-01-01',
+    'Admin',
+    'Propinq',
+    'admin@propinq.com',
+    'Sin dirección',
+    '+5493534000001',
+    'ADMIN',
+    1,
+    0
+),
+(
     UNHEX('11111111111111111111111111111111'),
-    '$2a$10$XuN33pdjkfpv3SfA8I.jm.hQHV3aempTZquspVNsBSCUkxmKzydjS',
+    '$2a$10$udlZWB5DwOzA1I1QJZ3usOVV764/LGq4Ir4/oYZPjMzCbiccTaT6u',
     '1985-05-15',
     'Juan',
     'Propietario',
@@ -19,7 +34,29 @@ INSERT IGNORE INTO users (
     'OWNER',
     1,
     0
-);
+),
+(
+    UNHEX('22222222222222222222222222222222'),
+    '$2a$10$udlZWB5DwOzA1I1QJZ3usOVV764/LGq4Ir4/oYZPjMzCbiccTaT6u',
+    '1992-08-20',
+    'Ana',
+    'Inquilina',
+    'inquilino@propinq.com',
+    'Córdoba Capital',
+    '+5493514000003',
+    'TENANT',
+    1,
+    0
+)
+ON DUPLICATE KEY UPDATE
+    password = VALUES(password),
+    role = VALUES(role),
+    activated = 1,
+    deleted = 0,
+    first_name = VALUES(first_name),
+    last_name = VALUES(last_name),
+    address = VALUES(address),
+    phone_number = VALUES(phone_number);
 
 -- ===================== IMÁGENES =====================
 -- Casas
