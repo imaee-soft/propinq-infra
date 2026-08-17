@@ -1,14 +1,11 @@
-# Homelab / CT102 servidor-propinq (192.168.1.69)
-# Layout monorepo local: propinq-infra junto a propinq-api y propinq-frontend
-# En CT102 usar docker-compose.ct102.yaml (rutas absolutas /srv/apps/propinq/)
-#
-# Público: Cloudflare Tunnel dedicado (cloudflared_propinq)
+# CT102 servidor-propinq (192.168.1.69) — layout en /srv/apps/propinq/
+# Usar: docker compose -f docker-compose.ct102.yaml up -d
 # Requiere .env.api .env.mysql .env.mongodb .env.nginx .env.tunnel .env.metabase
 
 services:
   api:
     build:
-      context: ../propinq-api
+      context: /srv/apps/propinq/propinq-api
       dockerfile: Dockerfile.prod
     container_name: propinq-api-prod
     env_file:
@@ -28,7 +25,7 @@ services:
 
   frontend:
     build:
-      context: ../propinq-frontend
+      context: /srv/apps/propinq/propinq-frontend
       dockerfile: Dockerfile.prod
     container_name: propinq-frontend-prod
     depends_on:
