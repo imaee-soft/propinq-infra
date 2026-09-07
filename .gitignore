@@ -2,5 +2,7 @@ certbot/*
 
 .env.*
 !.env.tunnel.example
+!.env.frontend.example
 .env
 *.pem
+local-data/

@@ -1,8 +1,9 @@
-# Homelab / monorepo local (build contexts relativos)
-# En el servidor de producción usar docker-compose.prod.yaml (rutas absolutas /srv/apps/propinq/)
+# Desarrollo local (build contexts relativos).
+# Producción: docker-compose.prod.yaml
 #
-# Público: Cloudflare Tunnel dedicado (cloudflared_propinq)
-# Requiere .env.api .env.mysql .env.mongodb .env.nginx .env.tunnel .env.metabase
+# Requiere .env.api .env.mysql .env.mongodb .env.nginx .env.frontend
+# Túnel Cloudflare (solo producción): .env.tunnel + --profile tunnel
+# Certbot (bootstrap SSL): --profile tools
 
 services:
   api:
@@ -29,6 +30,8 @@ services:
     build:
       context: ../propinq-frontend
       dockerfile: Dockerfile.prod
+    env_file:
+      - .env.frontend
     container_name: propinq-frontend-prod
     depends_on:
       - api
@@ -103,15 +106,12 @@ services:
       - label=disable
     ports:
       - "80:80"
-      - "443:443"
     env_file:
       - .env.nginx
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/prod.cloudflare.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/prod.local.conf:/etc/nginx/conf.d/default.conf:ro
       - nginx_logs:/var/log/nginx
-      - ./certbot/www:/var/www/certbot:ro
-      - ./certbot/conf:/etc/nginx/ssl:ro
     depends_on:
       - api
       - frontend
@@ -122,6 +122,7 @@ services:
     cpus: 0.1
 
   tunnel:
+    profiles: ["tunnel"]
     image: cloudflare/cloudflared:latest
     container_name: cloudflared_propinq
     restart: unless-stopped
