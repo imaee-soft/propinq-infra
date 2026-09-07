@@ -1,6 +1,6 @@
 # Producción — layout en /srv/apps/propinq/
 # Usar: docker compose -f docker-compose.prod.yaml up -d
-# Requiere .env.api .env.mysql .env.mongodb .env.nginx .env.tunnel .env.metabase .env.frontend
+# Requiere .env.api .env.mysql .env.mongodb .env.nginx .env.tunnel .env.metabase
 # Certbot (bootstrap SSL): --profile tools
 
 services:
@@ -28,8 +28,6 @@ services:
     build:
       context: /srv/apps/propinq/propinq-frontend
       dockerfile: Dockerfile.prod
-    env_file:
-      - .env.frontend
     container_name: propinq-frontend-prod
     depends_on:
       - api

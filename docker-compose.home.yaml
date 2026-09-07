@@ -1,7 +1,7 @@
 # Desarrollo local (build contexts relativos).
 # Producción: docker-compose.prod.yaml
 #
-# Requiere .env.api .env.mysql .env.mongodb .env.nginx .env.frontend
+# Requiere .env.api .env.mysql .env.mongodb .env.nginx
 # Túnel Cloudflare (solo producción): .env.tunnel + --profile tunnel
 # Certbot (bootstrap SSL): --profile tools
 
@@ -30,8 +30,6 @@ services:
     build:
       context: ../propinq-frontend
       dockerfile: Dockerfile.prod
-    env_file:
-      - .env.frontend
     container_name: propinq-frontend-prod
     depends_on:
       - api

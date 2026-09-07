@@ -42,8 +42,6 @@ services:
     build:
       context: ../propinq-frontend
       dockerfile: Dockerfile.prod
-    env_file:
-      - .env.frontend
     container_name: propinq-frontend-local
     depends_on:
       - api
