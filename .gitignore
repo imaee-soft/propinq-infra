@@ -4,3 +4,4 @@ certbot/*
 !.env.tunnel.example
 .env
 *.pem
+local-data/
