@@ -84,7 +84,7 @@ services:
     restart: unless-stopped
 
   nginx:
-    image: nginx:1.27-alpine
+    image: nginx:1.30-alpine
     container_name: nginx-propinq-prod
     security_opt:
       - no-new-privileges:false
